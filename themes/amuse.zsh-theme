@@ -62,6 +62,13 @@ aws_prompt_info() {
   fi
 }
 
+az_prompt_info() {
+  if [ ! -z "${AZ_CLI_VERSION}" ]; then
+    PROMPT="%{$fg[cyan]%}az-cli@${AZ_CLI_VERSION}%{$reset_color%}"
+    echo "☁️  ${PROMPT}"
+  fi
+}
+
 terraform_prompt_info() {
   if [ ! -z "${TERRAFORM_VERSION}" ]; then
     DOCKER_ANY=$(find . -maxdepth 1 -name "*.tf" | wc -l | awk '{print $1}')
@@ -77,7 +84,7 @@ kube_ps1() {
     KUBE_PS1_CONTEXT="$(kubectl config current-context)"
     KUBE_PS1_NAMESPACE="$(kubectl config view --minify --output 'jsonpath={..namespace}')"
     KUBE_PS1_NAMESPACE="${KUBE_PS1_NAMESPACE:-default}"
-    K8S_CONTEXT="%{$fg_bold[blue]%}📦 ${KUBE_PS1_NAMESPACE} 🔐 ${KUBE_PS1_CONTEXT}"
+    K8S_CONTEXT="%{$fg_bold[blue]%}🏗  ${K8S_VERSION} 🔐 ${KUBE_PS1_CONTEXT} 🍱 ${KUBE_PS1_NAMESPACE}"
     echo "${K8S_CONTEXT}"
   fi
 }
@@ -93,6 +100,13 @@ aws_ps1() {
   fi
 }
 
+az_ps1() {
+  if [ ! -z "${AZ_CLI_VERSION}" ]; then
+    AZ_ACCOUNT="$(az account list | jq -r '.[0]')"
+    AZ_PS1_PROFILE="%{$fg_bold[blue]%}🌎 $(echo ${AZ_ACCOUNT} | jq -r '.name') 👤 $(echo ${AZ_ACCOUNT} | jq -r '.user.name')"
+    echo "${AZ_PS1_PROFILE}"
+  fi
+}
 
 terraform_ps1() {
   if [ ! -z "${TERRAFORM_VERSION}" ]; then
@@ -116,13 +130,27 @@ git_remote() {
 # Too slow to make git calls here
 # %{$reset_color%}$(git_remote)%{$reset_color%}
 
+if [ ! -z "${AZ_CLI_VERSION}" ]; then
+
 PROMPT='
-$(aws_prompt_info) $(eiam_prompt_info) $(terraform_prompt_info)
+$(az_prompt_info) $(eiam_prompt_info) $(terraform_prompt_info)
+$(kubectl_prompt_info) $(kustomize_prompt_info) $(helm_prompt_info) $(argocd_prompt_info) $(docker_prompt_info) $(compose_prompt_info)
+%{$reset_color%}$(az_ps1)%{$reset_color%} %{$reset_color%}$(terraform_ps1)%{$reset_color%}
+%{$reset_color%}$(kube_ps1)%{$reset_color%} 
+%{$fg_bold[green]%}${PWD/#$HOME/~} $(git_prompt_info) ⌚ %{$fg_bold[red]%}%*%{$reset_color%}
+$ '
+
+else
+
+PROMPT='
+$(az_prompt_info) $(eiam_prompt_info) $(terraform_prompt_info)
 $(kubectl_prompt_info) $(kustomize_prompt_info) $(helm_prompt_info) $(argocd_prompt_info) $(docker_prompt_info) $(compose_prompt_info)
 %{$reset_color%}$(aws_ps1)%{$reset_color%} %{$reset_color%}$(terraform_ps1)%{$reset_color%}
 %{$reset_color%}$(kube_ps1)%{$reset_color%} 
 %{$fg_bold[green]%}${PWD/#$HOME/~} $(git_prompt_info) ⌚ %{$fg_bold[red]%}%*%{$reset_color%}
 $ '
+
+fi
 
 # Must use Powerline font, for \uE0A0 to render.
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$reset_color%}on %{$fg_bold[magenta]%}\uE0A0 "

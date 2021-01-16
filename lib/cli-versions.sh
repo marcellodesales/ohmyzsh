@@ -1,4 +1,5 @@
 export AWS_CLI_VERSION=`aws --version | awk '{print $1}' | awk -F "/" '{print $2}'`
+export AZ_CLI_VERSION=`az version | jq '."azure-cli"' -r`
 
 COMPOSE_VERSION=`docker-compose -v`
 COMPOSE_VERSION=${COMPOSE_VERSION#*version}
@@ -10,9 +11,13 @@ DOCKER_VERSION=${DOCKER_VERSION#*version}
 DOCKER_VERSION=${DOCKER_VERSION%,*}
 export DOCKER_VERSION=${DOCKER_VERSION/ /}
 
-KUBECTL_VERSION=`kubectl version --client --short`
+KUBECTL_VERSION=$(kubectl version --client --short)
 KUBECTL_VERSION=${KUBECTL_VERSION#*v}
 export KUBECTL_VERSION=${KUBECTL_VERSION/ /}
+
+K8S_VERSION=`kubectl version --short | grep Server | awk '{print $3}'`
+K8S_VERSION=${K8S_VERSION#*v}
+export K8S_VERSION=${K8S_VERSION/ /}
 
 HELM_VERSION=`helm version --client --short`
 HELM_VERSION=${HELM_VERSION#*v}
