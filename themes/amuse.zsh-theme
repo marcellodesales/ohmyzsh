@@ -137,7 +137,7 @@ $(az_prompt_info) $(eiam_prompt_info) $(terraform_prompt_info)
 $(kubectl_prompt_info) $(kustomize_prompt_info) $(helm_prompt_info) $(argocd_prompt_info) $(docker_prompt_info) $(compose_prompt_info)
 %{$reset_color%}$(az_ps1)%{$reset_color%} %{$reset_color%}$(terraform_ps1)%{$reset_color%}
 %{$reset_color%}$(kube_ps1)%{$reset_color%} 
-%{$fg_bold[green]%}${PWD/#$HOME/~} $(git_prompt_info) ⌚ %{$fg_bold[red]%}%*%{$reset_color%}
+%{$fg_bold[green]%}${PWD/#$HOME/~} $(git_prompt_info) 📅 %{$fg_bold[red]%}$(date +"%m-%d-%Y ⌚%T")%{$reset_color%}
 $ '
 
 else
@@ -147,7 +147,7 @@ $(az_prompt_info) $(eiam_prompt_info) $(terraform_prompt_info)
 $(kubectl_prompt_info) $(kustomize_prompt_info) $(helm_prompt_info) $(argocd_prompt_info) $(docker_prompt_info) $(compose_prompt_info)
 %{$reset_color%}$(aws_ps1)%{$reset_color%} %{$reset_color%}$(terraform_ps1)%{$reset_color%}
 %{$reset_color%}$(kube_ps1)%{$reset_color%} 
-%{$fg_bold[green]%}${PWD/#$HOME/~} $(git_prompt_info) ⌚ %{$fg_bold[red]%}%*%{$reset_color%}
+%{$fg_bold[green]%}${PWD/#$HOME/~} $(git_prompt_info) 📅 %{$fg_bold[red]%}$(date +"%m-%d-%Y ⌚%T")%{$reset_color%}
 $ '
 
 fi
