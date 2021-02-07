@@ -115,3 +115,5 @@ else
     fi
   fi
 fi
+
+. ${HOME}/.oh-my-zsh/lib/cli-versions.sh
