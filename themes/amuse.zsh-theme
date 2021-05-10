@@ -95,7 +95,7 @@ aws_ps1() {
     AWS_PS1_PROFILE="${AWS_PROFILE:-AWS_PS1_PROFILE}"
     # https://stackoverflow.com/questions/31331788/using-aws-cli-what-is-best-way-to-determine-the-current-region/63496689#63496689
     AWS_PS1_REGION="$(aws configure get region)"
-    AWS_CONTEXT="%{$fg_bold[blue]%}👤 ${AWS_PS1_PROFILE} 🌎 ${AWS_PS1_REGION}"
+    AWS_CONTEXT="%{$fg_bold[blue]%}👤 ${AWS_PS1_PROFILE} 🗂️  ${AWS_PS1_ACCOUNT_NUMBER} 🌎 ${AWS_PS1_REGION}"
     echo "${AWS_CONTEXT}"
   fi
 }
