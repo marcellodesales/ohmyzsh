@@ -48,6 +48,14 @@ argocd_prompt_info() {
   fi
 }
 
+glooctl_prompt_info() {
+  if [ ! -z "${GLOOCTL_VERSION}" ]; then
+    PROMPT="%{$fg[cyan]%}glooctl@${GLOOCTL_VERSION}%{$reset_color%}"
+    echo "✈️  ${PROMPT}"
+  fi
+}
+
+
 eiam_prompt_info() {
   if [ ! -z "${EIAM_VERSION}" ]; then
     PROMPT="%{$fg[cyan]%}aws-iam-authenticator@${EIAM_VERSION}%{$reset_color%}"
@@ -134,7 +142,7 @@ if [ ! -z "${AZ_CLI_VERSION}" ]; then
 
 PROMPT='
 $(az_prompt_info) $(eiam_prompt_info) $(terraform_prompt_info)
-$(kubectl_prompt_info) $(kustomize_prompt_info) $(helm_prompt_info) $(argocd_prompt_info) $(docker_prompt_info) $(compose_prompt_info)
+$(kubectl_prompt_info) $(kustomize_prompt_info) $(helm_prompt_info) $(argocd_prompt_info) $(glooctl_prompt_info) $(docker_prompt_info) $(compose_prompt_info)
 %{$reset_color%}$(az_ps1)%{$reset_color%} %{$reset_color%}$(terraform_ps1)%{$reset_color%}
 %{$reset_color%}$(kube_ps1)%{$reset_color%} 
 %{$fg_bold[green]%}${PWD/#$HOME/~} $(git_prompt_info) 📅 %{$fg_bold[red]%}$(date +"%m-%d-%Y ⌚%T")%{$reset_color%}
@@ -143,8 +151,8 @@ $ '
 else
 
 PROMPT='
-$(az_prompt_info) $(eiam_prompt_info) $(terraform_prompt_info)
-$(kubectl_prompt_info) $(kustomize_prompt_info) $(helm_prompt_info) $(argocd_prompt_info) $(docker_prompt_info) $(compose_prompt_info)
+$(aws_prompt_info) $(eiam_prompt_info) $(terraform_prompt_info)
+$(kubectl_prompt_info) $(kustomize_prompt_info) $(helm_prompt_info) $(argocd_prompt_info) $(glooctl_prompt_info) $(docker_prompt_info) $(compose_prompt_info)
 %{$reset_color%}$(aws_ps1)%{$reset_color%} %{$reset_color%}$(terraform_ps1)%{$reset_color%}
 %{$reset_color%}$(kube_ps1)%{$reset_color%} 
 %{$fg_bold[green]%}${PWD/#$HOME/~} $(git_prompt_info) 📅 %{$fg_bold[red]%}$(date +"%m-%d-%Y ⌚%T")%{$reset_color%}
