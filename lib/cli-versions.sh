@@ -38,6 +38,7 @@ export GLOOCTL_VERSION=`glooctl version 2>/dev/null | grep "Client: " | awk '{pr
 export EIAM_VERSION=`aws-iam-authenticator version -o yaml 2>/dev/null | grep Version | awk '{print $2}'`
 
 export TERRAFORM_VERSION=`terraform --version 2>/dev/null | grep -m1 "" | awk '{print $2}'`
+export PACKER_VERSION=`packer version 2>/dev/null | awk '{print $2}'`
 
 export GIT_PS1_SHOWUPSTREAM="auto"
 export GIT_PS1_SHOWUPSTREAM="yes"
