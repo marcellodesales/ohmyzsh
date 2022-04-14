@@ -32,8 +32,12 @@ ARGOCD_VERSION=${ARGOCD_VERSION#*v}
 ARGOCD_VERSION=${ARGOCD_VERSION%+*}
 export ARGOCD_VERSION=${ARGOCD_VERSION/ /}
 
-export GLOOCTL_VERSION=`glooctl version 2>/dev/null | grep "Client: " | awk '{print $2}' | jq -r '.version'`
+ARGO_VERSION=`argo version --short | awk '{print $2}' 2>/dev/null`
+ARGO_VERSION=${ARGO_VERSION#*v}
+ARGO_VERSION=${ARGO_VERSION%+*}
+export ARGO_VERSION=${ARGO_VERSION/ /}
 
+export GLOOCTL_VERSION=`glooctl version 2>/dev/null | grep "Client: " | awk '{print $2}' | jq -r '.version'`
 
 export EIAM_VERSION=`aws-iam-authenticator version -o yaml 2>/dev/null | grep Version | awk '{print $2}'`
 
