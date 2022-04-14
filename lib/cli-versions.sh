@@ -46,6 +46,5 @@ export PACKER_VERSION=`packer version 2>/dev/null | awk '{print $2}'`
 
 export GIT_PS1_SHOWUPSTREAM="auto"
 export GIT_PS1_SHOWUPSTREAM="yes"
-# ARGOCD
 
-export AWS_ACCOUNT=`aws sts get-caller-identity | jq -r '.Account'`
+#export AWS_ACCOUNT=`aws sts get-caller-identity | jq -r '.Account'`
