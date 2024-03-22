@@ -85,6 +85,13 @@ az_prompt_info() {
   fi
 }
 
+keybase_version() {
+  if [ ! -z "${KEYBASE_VERSION}" ]; then
+    PROMPT="%{$fg[cyan]%}keybase@${KEYBASE_VERSION}%{$reset_color%}"
+    echo "🔏 ${PROMPT}"
+  fi 
+}
+
 terraform_prompt_info() {
   if [ ! -z "${TERRAFORM_VERSION}" ]; then
     DOCKER_ANY=$(find . -maxdepth 1 -name "*.tf" | wc -l | awk '{print $1}')
@@ -105,8 +112,16 @@ kube_ps1() {
   fi
 }
 
+keybase_user_ps1() {
+  if [ -n "${KEYBASE_USERNAME}" ]; then
+    PROMPT="%{$fg_bold[blue]%}${KEYBASE_USERNAME}%{$reset_color%}"
+    echo -n "👮 ${PROMPT}"
+  fi 
+}
+
+
 aws_ps1() {
-  if [ ! -z "${AWS_CLI_VERSION}" ]; then
+  if [ ! -z "${AWS_CLI_VERSION}" ] && [ ! -z "${AWS_DEFAULT_PROFILE}" ]; then
     AWS_PS1_PROFILE="${AWS_DEFAULT_PROFILE:-default}"
     AWS_PS1_PROFILE="${AWS_PROFILE:-AWS_PS1_PROFILE}"
     # https://stackoverflow.com/questions/31331788/using-aws-cli-what-is-best-way-to-determine-the-current-region/63496689#63496689
@@ -135,6 +150,7 @@ terraform_ps1() {
   fi
 }
 
+
 git_remote() {
   GIT_ANY=$(find . -maxdepth 1 -name "*.git" | wc -l | awk '{print $1}')
   if [ ${GIT_ANY} -gt 0 ]; then
@@ -149,9 +165,9 @@ git_remote() {
 if [ ! -z "${AZ_CLI_VERSION}" ]; then
 
 PROMPT='
-$(az_prompt_info) $(eiam_prompt_info) $(terraform_prompt_info)
+$(az_prompt_info) $(eiam_prompt_info) $(terraform_prompt_info) 
 $(kubectl_prompt_info) $(kustomize_prompt_info) $(helm_prompt_info) $(argocd_prompt_info) $(argo_prompt_info) $(glooctl_prompt_info) $(docker_prompt_info) $(compose_prompt_info)
-%{$reset_color%}$(az_ps1)%{$reset_color%} %{$reset_color%}$(terraform_ps1)%{$reset_color%}
+%{$reset_color%}$(keybase_user_ps1) $(az_ps1)%{$reset_color%} %{$reset_color%}$(terraform_ps1)%{$reset_color%}
 %{$reset_color%}$(kube_ps1)%{$reset_color%} 
 %{$fg_bold[green]%}${PWD/#$HOME/~} $(git_prompt_info) 📅 %{$fg_bold[red]%}$(date +"%m-%d-%Y ⌚%T")%{$reset_color%}
 $ '
@@ -159,9 +175,9 @@ $ '
 else
 
 PROMPT='
-$(aws_prompt_info) $(eiam_prompt_info) $(terraform_prompt_info)
+$(aws_prompt_info) $(eiam_prompt_info) $(terraform_prompt_info) 
 $(kubectl_prompt_info) $(kustomize_prompt_info) $(helm_prompt_info) $(argocd_prompt_info) $(argo_prompt_info) $(glooctl_prompt_info) $(docker_prompt_info) $(compose_prompt_info)
-%{$reset_color%}$(aws_ps1)%{$reset_color%} %{$reset_color%}$(terraform_ps1)%{$reset_color%}
+%{$reset_color%}$(keybase_user_ps1) $(aws_ps1)%{$reset_color%} %{$reset_color%}$(terraform_ps1)%{$reset_color%}
 %{$reset_color%}$(kube_ps1)%{$reset_color%} 
 %{$fg_bold[green]%}${PWD/#$HOME/~} $(git_prompt_info) 📅 %{$fg_bold[red]%}$(date +"%m-%d-%Y ⌚%T")%{$reset_color%}
 $ '
